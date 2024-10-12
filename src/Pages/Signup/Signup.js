@@ -7,9 +7,9 @@ import { useSignUp } from '../../Hooks/useSignUp'
 
 
 export default function Signup() {
-  const [Email, setEmail] = useState(" ")
-  const [Password, setPassword] = useState(" ")
-  const [DisplayName, setDisplayName] = useState(" ")
+  const [Email, setEmail] = useState("")
+  const [Password, setPassword] = useState("")
+  const [DisplayName, setDisplayName] = useState("")
   const {signup, pending, error} = useSignUp()
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -28,7 +28,7 @@ export default function Signup() {
         />
         </label>
        
-        <label>Password: 
+        <label>Password:
         <input
         type='password'
         onChange={(e) => setPassword(e.target.value)}
