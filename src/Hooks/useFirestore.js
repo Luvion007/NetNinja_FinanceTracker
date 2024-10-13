@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState } from "react";
-import { projectFirestore } from "../config/firebase";
+import { projectFirestore, timestamp } from "../config/firebase";
 
 let initialState = {
     document: null, 
@@ -11,8 +11,12 @@ let initialState = {
 const firestoreReducer = (state, action) => {
     switch (action.type)
     {
-
-
+        case "IS_PENDING":
+            return {isPending: true, document: null, success : false, error: null}
+        case "ADD_DOCUMENT":
+            return {isPending: false, document : action.payload, success: true, error: null}    
+        case "ERROR": 
+            return {isPending: false, document: null, success: false, error: action.payload }
         default: 
             return state 
     }
@@ -28,14 +32,35 @@ export const useFirestore = (collection) => {
     //collection ref
     const ref = projectFirestore.collection(collection)
 
-    //ref.add() for future usage
-
-    //add boiler plate 
-    const addDocument = (doc) => {
+    //only dispatch if not cancelled 
+    const dispatchIfNotCancelled = (action) => {
+        if (!isCancelled)
+        {
+            dispatch(action)
+        }
 
     }
 
-    const deleteDocument = (id) => {
+    //ref.add() for future usage
+
+    //add boiler plate 
+    //doc object
+    const addDocument = async (doc) => {
+        dispatch({type: "IS_PENDING"})
+        
+        try{
+            //timestamp
+            const createdAt = timestamp.fromDate(new Date())
+          const addedDocument =  await ref.add({...doc, createdAt})
+          dispatchIfNotCancelled({type: 'ADD_DOCUMENT', payload: addedDocument})
+        
+        }catch(err){
+            dispatchIfNotCancelled({type: 'ERROR', payload: err.message})
+        }
+
+    }
+
+    const deleteDocument = async (id) => {
 
     }
 
@@ -43,6 +68,6 @@ export const useFirestore = (collection) => {
         return () => setIsCancelled(true)
     }, [])
 
-    return {addDocument, deleteDocument}
+    return {addDocument, deleteDocument, response}
 
 }

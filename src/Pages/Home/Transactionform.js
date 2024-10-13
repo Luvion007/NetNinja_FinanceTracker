@@ -1,12 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useFirestore } from '../../Hooks/useFirestore'
 
-export default function Transactionform() {
+
+export default function Transactionform({uid}) {
     const [transName, setTransName] = useState("")
     const [amount, setAmount] = useState("")
+    const { addDocument, response } = useFirestore('transactions')
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log({transName, amount})
+        addDocument({
+            uid,
+            transName,
+            amount
+        })
+       
     }
+
+    //reset the field
+    useEffect(()=> {
+        if(response.success)
+        {
+            setTransName("")
+            setAmount("")
+        }
+    }, [response.success])
+
   return (
     <>
     <h3>Add Transaction</h3>

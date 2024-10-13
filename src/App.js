@@ -14,6 +14,7 @@ function App() {
   const { authIsReady, user } = useAuthContext()
   return (
     <div className="App">
+      {/* waiting for authentication message before showing or it would flicker */}
       {authIsReady && (
       <Routers>
       <Navbar/>

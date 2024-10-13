@@ -20,5 +20,7 @@ firebase.initializeApp(firebaseConfig)
 //
 const projectFirestore = firebase.firestore()
 const projectAuth = firebase.auth()
+// timestamp because a date object wouldn't be recongizable in database
+const timestamp = firebase.firestore.Timestamp
 
-export {projectFirestore, projectAuth}
+export {projectFirestore, projectAuth, timestamp}
