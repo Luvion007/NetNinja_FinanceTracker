@@ -14,7 +14,7 @@ export default function Navbar() {
     
     <nav className={styles.navbar}>
         <ul>
-            <li className={styles.title}>myMoney</li>
+            <li className={styles.title}>myMoneyApp</li>
             {!user && (
             <>
             <li><Link to="/Login">Login</Link></li>

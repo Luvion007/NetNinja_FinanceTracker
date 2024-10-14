@@ -14,7 +14,9 @@ const firestoreReducer = (state, action) => {
         case "IS_PENDING":
             return {isPending: true, document: null, success : false, error: null}
         case "ADD_DOCUMENT":
-            return {isPending: false, document : action.payload, success: true, error: null}    
+            return {isPending: false, document : action.payload, success: true, error: null}  
+        case "DELETED_DOCUMENT": 
+            return {isPending: false, document : null, success: true, error: null}  
         case "ERROR": 
             return {isPending: false, document: null, success: false, error: action.payload }
         default: 
@@ -61,6 +63,17 @@ export const useFirestore = (collection) => {
     }
 
     const deleteDocument = async (id) => {
+        dispatch({type: "IS_PENDING"})
+
+        try{
+            await ref.doc(id).delete()
+            dispatchIfNotCancelled({type: "DELETED_DOCUMENT"})
+
+        }catch(err)
+        {
+            dispatchIfNotCancelled({type: "ERROR", payload: "could not delete"})
+        }
+        
 
     }
 
